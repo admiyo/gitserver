@@ -4,11 +4,14 @@ LABEL maintainer="Adam Young"
 # Update image
 RUN yum update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && rm -rf /var/cache/yum
 RUN yum install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos httpd git -y && rm -rf /var/cache/yum
+RUN yum install gitweb -y
 # Add default Web page and expose port
-RUN echo "The Web Server is Running" > /var/www/html/index.html
-COPY gitweb.conf /etc/httpd/conf.d/
-RUN mkdir -p /var/www/gitweb
-RUN echo "The Web Server is Running" > /var/www/gitweb/index.html
+RUN echo "The Web Server is still Running" > /var/www/html/index.html
+RUN chmod a+rx /var/www/html/index.html
+
+COPY git.conf /etc/httpd/conf.d/
+RUN mkdir -p /var/www/git
+
 
 EXPOSE 80
 # Start the service
