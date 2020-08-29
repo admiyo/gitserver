@@ -1,0 +1,17 @@
+#============= git_script_t ==============
+allow git_script_t httpd_var_lib_t:dir search;
+
+#!!!! This avc can be allowed using the boolean 'domain_can_mmap_files'
+allow git_script_t httpd_var_lib_t:file map;
+allow git_script_t httpd_var_lib_t:file { getattr open read };
+allow git_script_t var_lib_t:file { getattr ioctl open read };
+
+#============= httpd_t ==============
+
+#!!!! This avc can be allowed using the boolean 'httpd_unified'
+allow httpd_t httpd_sys_rw_content_t:file { execute execute_no_trans };
+
+#!!!! This avc can be allowed using the boolean 'domain_can_mmap_files'
+allow httpd_t httpd_var_lib_t:file map;
+allow httpd_t var_lib_t:file { execute execute_no_trans unlink };
+
