@@ -1,4 +1,4 @@
-FROM localhost/rhscl/httpd-24-rhel8
+FROM registry.redhat.io/rhel8/httpd-24
 USER root
 LABEL maintainer="Adam Young"
 
