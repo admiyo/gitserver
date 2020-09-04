@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhscl/httpd-24-rhel7
+FROM localhost/rhscl/httpd-24-rhel8
 USER root
 LABEL maintainer="Adam Young"
 
@@ -9,13 +9,14 @@ ENV HTTPD_VERSION=2.4
 
 #RUN yum install yum-security
 
+# INSTALL_PKGS="git gitweb" && \
 
-RUN yum install -y yum-utils && \
-    prepare-yum-repositories rhel-server-rhscl-7-rpms && \
-    INSTALL_PKGS="git gitweb" && \
+RUN yum -y module enable httpd:$HTTPD_VERSION && \
+    INSTALL_PKGS="git " && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
+
 
 
 #RUN yum install httpd git -y
@@ -23,9 +24,8 @@ RUN yum install -y yum-utils && \
 # Add default Web page and expose port
 RUN echo "The Web Server is still Running" > /var/www/html/index.html
 RUN chmod a+rx /var/www/html/index.html
-
 COPY git-http.conf /etc/httpd/conf.d/
-RUN mkdir -p /var/www/git
+#RUN mkdir -p /var/www/git
 
 
 EXPOSE 80
