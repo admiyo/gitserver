@@ -5,32 +5,18 @@ LABEL maintainer="Adam Young"
 ENV HTTPD_VERSION=2.4
 
 # Update image
-#RUN yum update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && rm -rf /var/cache/yum
-
-#RUN yum install yum-security
-
-# INSTALL_PKGS="git gitweb" && \
-
 RUN yum -y module enable httpd:$HTTPD_VERSION && \
     INSTALL_PKGS="git gitweb" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
 
-
-
-#RUN yum install httpd git -y
-#RUN yum install gitweb -y
 # Add default Web page and expose port
 RUN echo "The Web Server is still Running" > /var/www/html/index.html
 RUN chmod a+rx /var/www/html/index.html
 COPY git-http.conf /etc/httpd/conf.d/
-#RUN mkdir -p /var/www/git
-
 
 EXPOSE 80
 # Start the service
-#CMD ["-D", "FOREGROUND"]
-#ENTRYPOINT ["/usr/sbin/httpd"]
 CMD ["/usr/bin/run-httpd"]
 
